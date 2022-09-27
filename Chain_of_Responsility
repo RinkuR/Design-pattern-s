@@ -1,0 +1,113 @@
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+class BaseManageHandle
+{
+   private:
+	   BaseManageHandle *next;
+
+   public:
+	   BaseManageHandle()
+	   {
+		   next = nullptr;
+	   }
+
+	   //setting handle to next
+
+	   void setHandle(BaseManageHandle *n)
+	   {
+		   next = n;
+	   }
+
+	   // adding a handle 
+	   void addHandle(BaseManageHandle *n)
+	   {
+		   if (next)
+		   {
+			   next->addHandle(n);
+		   }
+		   else
+			   next = n;
+	   }
+
+	   //void handle function
+	   virtual void handle(int i)
+	   {
+		   next->handle(i);
+	   }
+};
+
+class Handler1 : public BaseManageHandle
+{
+     public:
+		 void handle(int i)
+		 {
+			 if (rand() % 3)
+			 {
+				 cout << "Passed handle 1 " << "i " << i << endl;
+				 BaseManageHandle::handle(i);
+
+			 }
+			 else
+			 {
+				 cout << " Handle 1 " << i;
+			 }
+		 }
+
+};
+
+class Handler2 : public BaseManageHandle
+{
+public:
+	void handle(int i)
+	{
+		if (rand() % 3)
+		{
+			cout << "Passed handle 2 " << "i " << i << endl;
+			BaseManageHandle::handle(i);
+
+		}
+		else
+		{
+			cout << " Handle 2 " << i;
+		}
+	}
+
+};
+
+class Handler3 : public BaseManageHandle
+{
+public:
+	void handle(int i)
+	{
+		if (rand() % 3)
+		{
+			cout << "Passed handle 3 " << "i " << i << endl;
+			BaseManageHandle::handle(i);
+
+		}
+		else
+		{
+			cout << " Handle 3 " << i;
+		}
+	}
+
+};
+
+int main()
+{
+	srand(time(0));
+	Handler1 root;
+	Handler2 two;
+	Handler3 thr;
+	root.addHandle(&two);
+	root.addHandle(&thr);
+	thr.setHandle(&root);
+	for (int i = 1; i < 10; i++)
+	{
+		root.handle(i);
+		cout << '\n';
+	}
+	return 0;
+}
